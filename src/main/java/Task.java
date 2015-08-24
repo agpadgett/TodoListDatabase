@@ -3,6 +3,7 @@ import org.sql2o.*;
 
 public class Task {
   private int id;
+  private int categoryId;
   private String description;
 
 
@@ -11,12 +12,17 @@ public class Task {
     return id;
   }
 
+  public int getCategoryId(){
+    return categoryId;
+  }
+
   public String getDescription(){
     return description;
   }
 
-  public Task(String description){
+  public Task(String description, int categoryId) {
     this.description = description;
+    this.categoryId = categoryId;
   }
 
   @Override
@@ -39,7 +45,7 @@ public class Task {
 
   public void save() {
     try(Connection con = DB.sql2o.open()){
-      String sql = "INSERT INTO tasks (description) VALUES (:description)";
+      String sql = "INSERT INTO tasks (description, categoryId) VALUES (:description, :categoryId)";
       this.id = (int) con.createQuery(sql, true)
         .addParameter("description", this.description)
         .executeUpdate()
